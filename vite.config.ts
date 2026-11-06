@@ -9,9 +9,10 @@ export default defineConfig({
         VitePWA({
             registerType: "autoUpdate",
 
-            includeAssets: ["favicon.svg"],
+            includeAssets: ["favicon.png"],
 
             manifest: {
+                id: "/",
                 name: "Training Timer",
                 short_name: "Training Timer",
                 description: "Timer para treinos intervalados",

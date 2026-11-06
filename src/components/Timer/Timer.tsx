@@ -102,6 +102,14 @@ export default function Timer({
             />
 
             <div className="timer-controls">
+                <button
+                    className="timer-button secondary"
+                    onClick={onReset}
+                    title="Reiniciar treino"
+                >
+                    <RotateCcw size={20} />
+                </button>
+                
                 {isRunning ? (
                     <button className="timer-button primary" onClick={onPause}>
                         <Pause size={21} />
@@ -117,14 +125,6 @@ export default function Timer({
                         {phase === "idle" ? "Iniciar treino" : "Continuar"}
                     </button>
                 )}
-
-                <button
-                    className="timer-button secondary"
-                    onClick={onReset}
-                    title="Reiniciar treino"
-                >
-                    <RotateCcw size={20} />
-                </button>
 
                 <button
                     className="timer-button secondary"
