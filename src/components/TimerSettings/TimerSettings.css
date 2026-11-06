@@ -1,0 +1,119 @@
+.settings-card {
+  background: #242424;
+  border: 1px solid #353535;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  color: #038291;
+}
+
+.settings-header h2 {
+  color: #ffffff;
+  font-size: 18px;
+  margin: 0 0 5px;
+}
+
+.settings-header p {
+  color: #999999;
+  font-size: 13px;
+  margin: 0;
+}
+
+.settings-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 20px;
+}
+
+.setting-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.setting-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #dddddd;
+  font-size: 14px;
+}
+
+.setting-icon {
+  display: flex;
+  color: #038291;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-input-group {
+  display: flex;
+  align-items: center;
+  background: #191919;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.time-input-group input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.time-input-group span {
+  color: #777777;
+  font-size: 11px;
+}
+
+.time-separator {
+  color: #888888;
+  font-weight: bold;
+}
+
+.rounds-input {
+  width: 100%;
+  background: #191919;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  outline: none;
+}
+
+.rounds-input:focus,
+.time-input-group:focus-within {
+  border-color: #038291;
+}
+
+.settings-hint {
+  color: #999999;
+  font-size: 12px;
+  margin: 20px 0 0;
+}
+
+@media (max-width: 480px) {
+  .settings-fields {
+    grid-template-columns: 1fr;
+  }
+}
