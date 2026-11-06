@@ -22,9 +22,6 @@ interface TimerProps {
     round: number;
     totalRounds: number;
     isRunning: boolean;
-    preparationTime: number;
-    exerciseTime: number;
-    restTime: number;
     onStart: () => void;
     onPause: () => void;
     onReset: () => void;
@@ -33,10 +30,10 @@ interface TimerProps {
 
 const PHASE_COLORS: Record<TimerPhase, string> = {
     idle: "#038291",
-    preparation: "#038291",
-    exercise: "#FF9E01",
-    rest: "#999999",
-    finished: "#22c55e"
+    preparation: "#FFFF00",
+    exercise: "#33ff00",
+    rest: "#FF0000",
+    finished: "#038291"
 };
 
 const PHASE_ICONS = {
@@ -54,9 +51,6 @@ export default function Timer({
     round,
     totalRounds,
     isRunning,
-    preparationTime,
-    exerciseTime,
-    restTime,
     onStart,
     onPause,
     onReset,
@@ -70,49 +64,28 @@ export default function Timer({
         seconds.toString().padStart(2, "0")
     ].join(":");
 
-    const currentDuration =
-        phase === "preparation" ? preparationTime : phase === "rest" ? restTime : exerciseTime;
-
-    const progress = currentDuration > 0 ? (secondsLeft / currentDuration) * 100 : 0;
-
-    const circumference = 2 * Math.PI * 115;
-    const strokeOffset =
-        circumference - (Math.max(0, Math.min(100, progress)) / 100) * circumference;
-
     const color = PHASE_COLORS[phase];
 
     return (
-        <section className="timer-card" style={{ "--phase-color": color } as React.CSSProperties}>
+        <section
+            className={`timer-card phase-${phase}`}
+            style={{ "--phase-color": color } as React.CSSProperties}
+        >
             <div className="timer-phase">
                 <span className="phase-icon">{PHASE_ICONS[phase]}</span>
 
                 <span>{phaseLabel}</span>
             </div>
 
-            <div className="timer-circle">
-                <svg viewBox="0 0 260 260">
-                    <circle className="timer-circle-background" cx="130" cy="130" r="115" />
-
-                    <circle
-                        className="timer-circle-progress"
-                        cx="130"
-                        cy="130"
-                        r="115"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={strokeOffset}
-                    />
-                </svg>
-
-                <div className="timer-time">
-                    {phase === "finished" ? (
-                        <CheckCircle size={58} color={color} />
-                    ) : (
-                        <>
-                            <strong>{formattedTime}</strong>
-                            <span>RESTANTE</span>
-                        </>
-                    )}
-                </div>
+            <div className="timer-time">
+                {phase === "finished" ? (
+                    <CheckCircle size={58} color={color} />
+                ) : (
+                    <>
+                        <strong>{formattedTime}</strong>
+                        <span>RESTANTE</span>
+                    </>
+                )}
             </div>
 
             <div className="timer-round">

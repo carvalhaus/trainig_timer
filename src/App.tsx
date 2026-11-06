@@ -1,4 +1,4 @@
-import { Dumbbell, Settings2 } from "lucide-react";
+import { Settings2 } from "lucide-react";
 
 import Timer from "./components/Timer/Timer";
 import TimerSettings from "./components/TimerSettings/TimerSettings";
@@ -24,24 +24,6 @@ function App() {
 
     return (
         <main className="app-container">
-            <header className="app-header">
-                <div className="app-brand">
-                    <div className="app-logo">
-                        <Dumbbell size={25} />
-                    </div>
-
-                    <div>
-                        <h1>TRAINING TIMER</h1>
-                        <p>Seu treino no ritmo certo</p>
-                    </div>
-                </div>
-
-                <div className="app-status">
-                    <span className="status-indicator" />
-                    Interval Timer
-                </div>
-            </header>
-
             <div className="app-content">
                 <div className="app-title">
                     <div>
@@ -60,9 +42,6 @@ function App() {
                         round={round}
                         totalRounds={config.rounds}
                         isRunning={isRunning}
-                        preparationTime={config.preparationTime}
-                        exerciseTime={config.exerciseTime}
-                        restTime={config.restTime}
                         onStart={start}
                         onPause={pause}
                         onReset={reset}
