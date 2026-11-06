@@ -127,11 +127,11 @@ export function useTimer() {
             if (nextPhase === "preparation") {
                 playSound(600, 0.8, 0.6);
             } else if (nextPhase === "exercise") {
-                playSound(1000, 0.8, 0.6);
+                playSound(1000, 0.8, 2.0);
             } else if (nextPhase === "rest") {
-                playSound(500, 0.8, 0.6);
+                playSound(500, 0.8, 2.0);
             } else if (nextPhase === "finished") {
-                playSound(1200, 1.0, 1.0);
+                playSound(1200, 1.0, 2.0);
             }
         },
         [getPhaseDuration, playSound]
