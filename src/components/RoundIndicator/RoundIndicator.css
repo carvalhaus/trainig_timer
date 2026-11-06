@@ -1,0 +1,38 @@
+.round-indicator {
+  width: 100%;
+}
+
+.round-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  color: #aaaaaa;
+  font-size: 13px;
+}
+
+.round-header strong {
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.round-bars {
+  display: flex;
+  gap: 7px;
+}
+
+.round-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 10px;
+  background: #414141;
+  transition: background 0.3s ease;
+}
+
+.round-bar.completed {
+  background: #038291;
+}
+
+.round-bar.current {
+  background: #ff9e01;
+}
