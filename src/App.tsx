@@ -1,5 +1,3 @@
-import { Settings2 } from "lucide-react";
-
 import Timer from "./components/Timer/Timer";
 import TimerSettings from "./components/TimerSettings/TimerSettings";
 
@@ -25,15 +23,6 @@ function App() {
     return (
         <main className="app-container">
             <div className="app-content">
-                <div className="app-title">
-                    <div>
-                        <h2>Seu treino</h2>
-                        <p>Configure os intervalos e comece a treinar.</p>
-                    </div>
-
-                    <Settings2 size={23} />
-                </div>
-
                 <div className="app-grid">
                     <Timer
                         phase={phase}
