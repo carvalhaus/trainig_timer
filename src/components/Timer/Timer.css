@@ -1,0 +1,158 @@
+.timer-card {
+  --phase-color: #038291;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  background: #242424;
+  border: 1px solid #353535;
+  border-radius: 16px;
+  padding: 30px;
+}
+
+.timer-phase {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--phase-color);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.phase-icon {
+  display: flex;
+}
+
+.timer-circle {
+  width: 260px;
+  height: 260px;
+  position: relative;
+}
+
+.timer-circle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-circle-background {
+  fill: none;
+  stroke: #414141;
+  stroke-width: 9;
+}
+
+.timer-circle-progress {
+  fill: none;
+  stroke: var(--phase-color);
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.2s linear;
+}
+
+.timer-time {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-time strong {
+  font-size: 55px;
+  font-weight: 700;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -2px;
+}
+
+.timer-time span {
+  color: #888888;
+  font-size: 11px;
+  letter-spacing: 3px;
+  margin-top: 5px;
+}
+
+.timer-round {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.timer-round span {
+  color: #999999;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.timer-round strong {
+  color: #ffffff;
+  font-size: 25px;
+}
+
+.timer-round small {
+  color: #888888;
+  font-size: 16px;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.timer-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.timer-button.primary {
+  flex: 1;
+  background: #038291;
+  color: #ffffff;
+}
+
+.timer-button.primary:hover:not(:disabled) {
+  background: #049aaa;
+}
+
+.timer-button.secondary {
+  width: 50px;
+  background: #353535;
+  color: #ffffff;
+}
+
+.timer-button.secondary:hover:not(:disabled) {
+  background: #454545;
+}
+
+.timer-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .timer-card {
+    padding: 22px 16px;
+  }
+
+  .timer-circle {
+    width: 230px;
+    height: 230px;
+  }
+
+  .timer-time strong {
+    font-size: 46px;
+  }
+}
