@@ -47,11 +47,67 @@ export function useTimer() {
     const audioContextRef = useRef<AudioContext | null>(null);
     const lastCountdownRef = useRef<string | null>(null);
 
+    const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+
     useEffect(() => {
         configRef.current = config;
 
         localStorage.setItem("training-timer-config", JSON.stringify(config));
     }, [config]);
+
+    useEffect(() => {
+        if (!isRunning) return;
+
+        let active = true;
+
+        const requestWakeLock = async () => {
+            if (!("wakeLock" in navigator) || document.visibilityState !== "visible") {
+                return;
+            }
+
+            try {
+                if (wakeLockRef.current) return;
+
+                const wakeLock = await navigator.wakeLock.request("screen");
+
+                if (!active) {
+                    await wakeLock.release();
+                    return;
+                }
+
+                wakeLockRef.current = wakeLock;
+
+                wakeLock.addEventListener("release", () => {
+                    if (wakeLockRef.current === wakeLock) {
+                        wakeLockRef.current = null;
+                    }
+                });
+            } catch (error) {
+                console.error("Não foi possível manter a tela ativa:", error);
+            }
+        };
+
+        void requestWakeLock();
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+                void requestWakeLock();
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            active = false;
+
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+
+            if (wakeLockRef.current) {
+                void wakeLockRef.current.release();
+                wakeLockRef.current = null;
+            }
+        };
+    }, [isRunning]);
 
     const getPhaseDuration = useCallback((currentPhase: TimerPhase) => {
         const currentConfig = configRef.current;
@@ -71,45 +127,57 @@ export function useTimer() {
         }
     }, []);
 
-    const playSound = useCallback((frequency = 800, volume = 0.3, duration = 0.4) => {
-        try {
-            const AudioContextClass =
-                window.AudioContext ||
-                (
-                    window as typeof window & {
-                        webkitAudioContext?: typeof AudioContext;
-                    }
-                ).webkitAudioContext;
+    const playSound = useCallback(
+        (frequency = 1000, volume = 0.9, duration = 0.08, repetitions = 1, interval = 0.08) => {
+            try {
+                const AudioContextClass =
+                    window.AudioContext ||
+                    (
+                        window as typeof window & {
+                            webkitAudioContext?: typeof AudioContext;
+                        }
+                    ).webkitAudioContext;
 
-            if (!AudioContextClass) return;
+                if (!AudioContextClass) return;
 
-            const audioContext = audioContextRef.current ?? new AudioContextClass();
+                const audioContext = audioContextRef.current ?? new AudioContextClass();
 
-            audioContextRef.current = audioContext;
+                audioContextRef.current = audioContext;
 
-            if (audioContext.state === "suspended") {
-                void audioContext.resume();
+                if (audioContext.state === "suspended") {
+                    void audioContext.resume();
+                }
+
+                const safeVolume = Math.min(Math.max(volume, 0.001), 1);
+                const now = audioContext.currentTime;
+
+                for (let i = 0; i < repetitions; i++) {
+                    const startTime = now + i * (duration + interval);
+                    const endTime = startTime + duration;
+
+                    const oscillator = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+
+                    oscillator.type = "square";
+                    oscillator.frequency.setValueAtTime(frequency, startTime);
+
+                    oscillator.connect(gain);
+                    gain.connect(audioContext.destination);
+
+                    gain.gain.setValueAtTime(0.001, startTime);
+                    gain.gain.linearRampToValueAtTime(safeVolume, startTime + 0.005);
+                    gain.gain.setValueAtTime(safeVolume, endTime - 0.015);
+                    gain.gain.linearRampToValueAtTime(0.001, endTime);
+
+                    oscillator.start(startTime);
+                    oscillator.stop(endTime);
+                }
+            } catch (error) {
+                console.error("Erro ao reproduzir som:", error);
             }
-
-            const oscillator = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-
-            oscillator.connect(gain);
-            gain.connect(audioContext.destination);
-
-            oscillator.frequency.value = frequency;
-            oscillator.type = "sine";
-
-            gain.gain.setValueAtTime(volume, audioContext.currentTime);
-
-            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
-
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + duration);
-        } catch (error) {
-            console.error("Erro ao reproduzir som:", error);
-        }
-    }, []);
+        },
+        []
+    );
 
     const updatePhase = useCallback(
         (nextPhase: TimerPhase, nextRound: number) => {
@@ -125,13 +193,13 @@ export function useTimer() {
             setSecondsLeft(duration);
 
             if (nextPhase === "preparation") {
-                playSound(600, 0.8, 0.6);
+                playSound(600, 0.8, 0.6, 1, 0.005);
             } else if (nextPhase === "exercise") {
-                playSound(1200, 0.9, 4.0);
+                playSound(1200, 0.9, 1.0, 1, 0.005);
             } else if (nextPhase === "rest") {
-                playSound(1200, 0.9, 4.0);
+                playSound(1200, 1.5, 0.5, 8, 0.005);
             } else if (nextPhase === "finished") {
-                playSound(1200, 1.00, 3.0);
+                playSound(1200, 1.5, 0.5, 8, 0.005);
             }
         },
         [getPhaseDuration, playSound]
